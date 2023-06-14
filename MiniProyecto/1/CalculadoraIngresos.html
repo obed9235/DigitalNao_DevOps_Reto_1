@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  
+ 
+
+ 
+<title>Calculadora de Ingresos</title>
+  
+ 
+<script>
+   
+
+
+
+    function calcularIngresos() {
+      // Obtener los valores de los campos de entrada
+      var horasTrabajadas = parseFloat(document.getElementById("horasTrabajadas").value);
+      var tarifaPorHora = parseFloat(document.getElementById("tarifaPorHora").value);
+      
+      // Calcular los ingresos
+      var ingresos = horasTrabajadas * tarifaPorHora;
+      
+      // Mostrar el resultado
+      document.getElementById("resultado").innerHTML = "Ingresos: $" + ingresos.toFixed(2);
+    }
+  </script>
+</head>
+<body>
+  
+ 
+<h1>Calculadora de Ingresos</h1>
+  
+  
+  
+ 
+<label for="horasTrabajadas">Horas trabajadas:</label>
+  
+
+
+ 
+<input type="number" id="horasTrabajadas"><br>
+  
+  
+  
+ 
+
+  
+<label for="tarifaPorHora">Tarifa por hora:</label>
+  
+ 
+<input type="number" id="tarifaPorHora"><br>
+  
+  
+  
+ 
+
+  
+<button onclick="calcularIngresos()">Calcular</button>
+  
+  
+  
+ 
+
+  
+<p id="resultado"></p>
+
+
+</body>
+
+
+</html>
