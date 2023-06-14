@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Miniproyecto 2</title>
+  <style>
+    #loader {
+      display: none;
+      text-align: center;
+      margin: 10px;
+    }
+  </style>
+  <script>
+    var page = 1; 
+    var isLoading = false; 
+    
+    function loadData() {
+      if (isLoading) return;
+      
+      isLoading = true;
+      
+     
+      document.getElementById('loader').style.display = "block";
+      
+     
+      setTimeout(function() {
+        var dataContainer = document.getElementById('dataContainer');
+        
+     
+        var newData = '';
+        for (var i = 5; i <= 10; i++) {
+          newData += '<div style="width: 700px;    height: 200px;    padding: 18px;    margin: 30px 0;    border-radius: 30px; color: red; background-color: blue;"><center>Dato ' + ((page - 1) * 10 + i) + '</center></div>';
+        }
+        
+       
+        dataContainer.innerHTML += newData;
+        
+        
+        page++;
+        
+        
+        document.getElementById('loader').style.display = 'none';
+        
+        isLoading = false;
+      }, 100); 
+    }
+    
+    
+    window.addEventListener('scroll', function() {
+      var scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+      var windowHeight = window.innerHeight || document.documentElement.clientHeight;
+      var documentHeight = document.documentElement.scrollHeight;
+      
+    
+      if (scrollPosition + windowHeight >= documentHeight) {
+        loadData();
+      }
+    });
+  </script>
+</head>
+<body>
+  <center><h1>Miniproyecto 2 - Scroll Infinito</h1></center>
+  <div id="global" style="
+			width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center">
+	
+	
+	
+	<div style="width: 700px;
+    height: 200px;
+    padding: 18px;
+    margin: 30px 0;
+    border-radius: 30px;"id="dataContainer" >
+	
+	<div style="width: 700px;
+    height: 200px;
+    padding: 18px;
+    margin: 30px 0;
+    border-radius: 30px;
+	color: red;
+	background-color: blue;"><center>Dato 1</center></div>
+    
+	<div style="width: 700px;
+    height: 200px;
+    padding: 18px;
+    margin: 30px 0;
+    border-radius: 30px;
+	color: red;
+	background-color: blue;"><center>Dato 2</center></div>
+    
+	<div style="width: 700px;
+    height: 200px;
+    padding: 18px;
+    margin: 30px 0;
+    border-radius: 30px;
+	color: red;
+	background-color: blue;"><center>Dato 3</center></div>
+	
+	<div style="width: 700px;
+    height: 200px;
+    padding: 18px;
+    margin: 30px 0;
+    border-radius: 30px;
+	color: red;
+	background-color: blue;"><center>Dato 4</center></div>
+	
+
+	
+	
+  </div>
+  <div id="loader">
+    <p>Cargando...</p>
+  </div>
+</body>
+</html>
