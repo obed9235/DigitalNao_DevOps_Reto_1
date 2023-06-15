@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ratings de Películas</title>
+</head>
+<body>
+    <h1>Ratings de Películas</h1>
+    <ul>
+    {% for movie in movies %}
+        <li>{{ movie.title }}: {{ movie.rating }}</li>
+    {% endfor %}
+    </ul>
+    <p><a href="/">Regresar</a></p>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Juego de Ahorcado</title>
+</head>
+<body>
+    <h1>Juego de Ahorcado</h1>
+    <p>Recuerda usar solo minusculas y descubre la palabra secreta o muere en el intento</p>
+    <p>Intentos restantes: {{ attempts }}</p>
+    <p>Palabra adivinada: {{ guessed_letters }}</p>
+    <form method="POST" action="/play">
+        <label for="letter">Ingresa una letra:</label>
+        <input type="text" id="letter" name="letter" maxlength="1">
+        <button type="submit">Enviar</button>
+    </form>
+    <p>{{ message }}</p>
+</body>
+</html>
