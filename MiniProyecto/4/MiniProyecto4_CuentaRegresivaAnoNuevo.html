@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MiniProyecto4</title>
+  <style>
+    #countdown {
+      font-size: 48px;
+      text-align: center;
+      margin: 200px auto;
+    }
+  </style>
+  <script>
+    // Obtener la fecha actual
+    var currentDate = new Date();
+    
+    // Calcular la fecha del próximo año nuevo
+    var currentYear = currentDate.getFullYear();
+    var newYearDate = new Date(currentYear + 1, 0, 1);
+    
+    // Calcular la diferencia entre la fecha actual y el próximo año nuevo
+    var timeLeft = newYearDate.getTime() - currentDate.getTime();
+    
+    // Actualizar el contador cada segundo
+    var countdown = setInterval(function() {
+      // Obtener la fecha y hora actual
+      var now = new Date().getTime();
+      
+      // Calcular la diferencia de tiempo restante
+      var timeLeft = newYearDate.getTime() - now;
+      
+      // Calcular los días, horas, minutos y segundos restantes
+      var days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+      
+      // Mostrar el contador en la página HTML
+      document.getElementById("countdown").innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s";
+      
+      // Si el tiempo restante es cero, detener el contador
+      if (timeLeft <= 0) {
+        clearInterval(countdown);
+        document.getElementById("countdown").innerHTML = "¡Feliz Año Nuevo!";
+      }
+    }, 1000);
+  </script>
+</head>
+<body>
+  <center><h1>Cuenta Regresiva para el Año Nuevo</h1></center>
+  
+  <div id="countdown"></div>
+</body>
+</html>

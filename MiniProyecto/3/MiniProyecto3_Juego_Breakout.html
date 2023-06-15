@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Breakout</title>
+  <style>
+    #gameCanvas {
+      border: 1px solid #000;
+    }
+  </style>
+  <script>
+    // Variables del juego
+    var canvas;
+    var context;
+    var paddle;
+    var ball;
+    var bricks = [];
+    var score = 0;
+    var lives = 3;
+    
+    // Configuración del juego
+    var brickRowCount = 5;
+    var brickColumnCount = 5;
+    var brickWidth = 75;
+    var brickHeight = 20;
+    var brickPadding = 10;
+    var brickOffsetTop = 30;
+    var brickOffsetLeft = 30;
+    var paddleWidth = 75;
+    var paddleHeight = 10;
+    var paddleSpeed = 7;
+    var ballRadius = 10;
+    var ballSpeedX = 2;
+    var ballSpeedY = -2;
+    
+    // Inicialización del juego
+    function init() {
+      canvas = document.getElementById("gameCanvas");
+      context = canvas.getContext("2d");
+      
+      paddle = {
+        x: (canvas.width - paddleWidth) / 2,
+        y: canvas.height - paddleHeight,
+        width: paddleWidth,
+        height: paddleHeight,
+        dx: 0
+      };
+      
+      ball = {
+        x: canvas.width / 2,
+        y: canvas.height - paddleHeight - ballRadius,
+        radius: ballRadius,
+        dx: ballSpeedX,
+        dy: ballSpeedY
+      };
+      
+      // Crear ladrillos
+      for (var column = 0; column < brickColumnCount; column++) {
+        bricks[column] = [];
+        for (var row = 0; row < brickRowCount; row++) {
+          bricks[column][row] = { x: 0, y: 0, status: 1 };
+        }
+      }
+      
+      // Event listeners para el control de la paleta
+      document.addEventListener("keydown", keyDownHandler);
+      document.addEventListener("keyup", keyUpHandler);
+      
+      // Event listener para el movimiento del ratón
+      document.addEventListener("mousemove", mouseMoveHandler);
+      
+      // Iniciar el bucle del juego
+      setInterval(draw, 10);
+    }
+    
+    // Dibujar elementos del juego
+    function draw() {
+      // Borrar el lienzo
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Dibujar los ladrillos
+      for (var column = 0; column < brickColumnCount; column++) {
+        for (var row = 0; row < brickRowCount; row++) {
+          if (bricks[column][row].status === 1) {
+            var brickX = (column * (brickWidth + brickPadding)) + brickOffsetLeft;
+            var brickY = (row * (brickHeight + brickPadding)) + brickOffsetTop;
+            bricks[column][row].x = brickX;
+            bricks[column][row].y = brickY;
+            context.beginPath();
+            context.rect(brickX, brickY, brickWidth, brickHeight);
+            context.fillStyle = "#000000";
+            context.fill();
+            context.closePath();
+          }
+        }
+      }
+      
+      // Dibujar la paleta
+      context.beginPath();
+      context.rect(paddle.x, paddle.y, paddle.width, paddle.height);
+      context.fillStyle = "#000000";
+      context.fill();
+      context.closePath();
+      
+      // Mover la paleta
+      paddle.x += paddle.dx;
+      if (paddle.x < 0) {
+        paddle.x = 0;
+      }
+      if (paddle.x + paddle.width > canvas.width) {
+        paddle.x = canvas.width - paddle.width;
+      }
+      
+      // Dibujar la pelota
+      context.beginPath();
+      context.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+      context.fillStyle = "#000000";
+      context.fill();
+      context.closePath();
+      
+      // Mover la pelota
+      ball.x += ball.dx;
+      ball.y += ball.dy;
+      
+      // Rebotar la pelota en los límites del lienzo
+      if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
+        ball.dx = -ball.dx;
+      }
+      if (ball.y - ball.radius < 0) {
+        ball.dy = -ball.dy;
+      }
+      
+      // Rebotar la pelota en la paleta
+      if (ball.y + ball.radius > canvas.height - paddle.height) {
+        if (ball.x > paddle.x && ball.x < paddle.x + paddle.width) {
+          ball.dy = -ball.dy;
+        } else {
+          lives--;
+          if (!lives) {
+            alert("Perdiste");
+            document.location.reload();
+          } else {
+            ball.x = canvas.width / 2;
+            ball.y = canvas.height - paddleHeight - ballRadius;
+            ball.dx = ballSpeedX;
+            ball.dy = ballSpeedY;
+            paddle.x = (canvas.width - paddleWidth) / 2;
+          }
+        }
+      }
+      
+      // Detectar colisiones con los ladrillos
+      for (var column = 0; column < brickColumnCount; column++) {
+        for (var row = 0; row < brickRowCount; row++) {
+          var brick = bricks[column][row];
+          if (brick.status === 1) {
+            if (
+              ball.x > brick.x &&
+              ball.x < brick.x + brickWidth &&
+              ball.y > brick.y &&
+              ball.y < brick.y + brickHeight
+            ) {
+              ball.dy = -ball.dy;
+              brick.status = 0;
+              score++;
+              if (score === brickRowCount * brickColumnCount) {
+                alert("¡Ganaste!");
+                document.location.reload();
+              }
+            }
+          }
+        }
+      }
+      
+      // Mostrar puntuación y vidas
+      context.font = "16px Arial";
+      context.fillStyle = "#000000";
+      context.fillText("Puntuación: " + score, 8, 20);
+      context.fillText("Vidas: " + lives, canvas.width - 80, 20);
+    }
+    
+    // Event handler para el movimiento de la paleta con las teclas
+    function keyDownHandler(event) {
+      if (event.keyCode === 39) {
+        paddle.dx = paddleSpeed;
+      } else if (event.keyCode === 37) {
+        paddle.dx = -paddleSpeed;
+      }
+    }
+    
+    function keyUpHandler(event) {
+      if (event.keyCode === 39 || event.keyCode === 37) {
+        paddle.dx = 0;
+      }
+    }
+    
+    // Event handler para el movimiento de la paleta con el ratón
+    function mouseMoveHandler(event) {
+      var relativeX = event.clientX - canvas.offsetLeft;
+      if (relativeX > 0 && relativeX < canvas.width) {
+        paddle.x = relativeX - paddle.width / 2;
+      }
+    }
+    
+    // Iniciar el juego
+    document.addEventListener("DOMContentLoaded", function() {
+      init();
+    });
+  </script>
+</head>
+<body>
+  <center><h1>Breakout</h1></center>
+  
+  <center><canvas id="gameCanvas" width="480" height="320"></canvas></center>
+</body>
+</html>
