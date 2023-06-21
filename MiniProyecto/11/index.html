@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Aplicación de Pintura</title>
+  <style>
+    #canvas {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <h1>Aplicación de Pintura</h1>
+  
+  <canvas id="canvas" width="500" height="500"></canvas>
+  <button onclick="limpiarPantalla()">Limpiar Pantalla</button>
+
+  <script>
+    // Obtener el elemento canvas
+    var canvas = document.getElementById("canvas");
+    var context = canvas.getContext("2d");
+
+    // Variables para almacenar la posición anterior del cursor
+    var prevX = 0;
+    var prevY = 0;
+
+    // Bandera para indicar si se debe dibujar o no
+    var dibujando = false;
+
+    // Función para dibujar en el canvas
+    function dibujar(event) {
+      if (!dibujando) return;
+
+      // Obtener la posición actual del cursor
+      var x = event.clientX - canvas.offsetLeft;
+      var y = event.clientY - canvas.offsetTop;
+
+      // Dibujar una línea desde la posición anterior a la actual
+      context.beginPath();
+      context.moveTo(prevX, prevY);
+      context.lineTo(x, y);
+      context.stroke();
+
+      // Actualizar la posición anterior del cursor
+      prevX = x;
+      prevY = y;
+    }
+
+    // Manejador de eventos para comenzar a dibujar
+    canvas.addEventListener("mousedown", function(event) {
+      dibujando = true;
+      prevX = event.clientX - canvas.offsetLeft;
+      prevY = event.clientY - canvas.offsetTop;
+    });
+
+    // Manejador de eventos para dejar de dibujar
+    canvas.addEventListener("mouseup", function() {
+      dibujando = false;
+    });
+
+    // Manejador de eventos para dibujar mientras se mueve el cursor
+    canvas.addEventListener("mousemove", dibujar);
+
+    // Función para limpiar el canvas
+    function limpiarPantalla() {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  </script>
+</body>
+</html>
