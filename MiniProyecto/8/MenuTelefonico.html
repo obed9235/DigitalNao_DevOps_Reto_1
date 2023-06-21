@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Directorio Telefónico</title>
+  <style>
+    input[type="text"] {
+      padding: 5px;
+      width: 300px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Directorio Telefónico</h1>
+
+  <label for="search">Buscar:</label>
+  <input type="text" id="search" onkeyup="searchContact()" placeholder="Nombre de contacto">
+
+  <ul id="contactList"></ul>
+
+  <script>
+    // Datos del directorio telefónico
+    var directorio = [
+      { nombre: "Juan Perez", telefono: "1234567890" },
+      { nombre: "María Rodríguez", telefono: "9876543210" },
+      { nombre: "Carlos Gómez", telefono: "5678901234" },
+      { nombre: "Ana López", telefono: "4321098765" },
+      { nombre: "Pedro Martínez", telefono: "9876543210" }
+    ];
+
+    // Función para buscar y mostrar contactos que coincidan con la búsqueda
+    function searchContact() {
+      var input = document.getElementById("search");
+      var filter = input.value.toUpperCase();
+      var ul = document.getElementById("contactList");
+      ul.innerHTML = "";
+
+      for (var i = 0; i < directorio.length; i++) {
+        var nombre = directorio[i].nombre.toUpperCase();
+
+        if (nombre.indexOf(filter) > -1) {
+          var li = document.createElement("li");
+          li.appendChild(document.createTextNode(directorio[i].nombre + " - " + directorio[i].telefono));
+          ul.appendChild(li);
+        }
+      }
+    }
+  </script>
+</body>
+</html>
