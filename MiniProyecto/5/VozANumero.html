@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Traductor de Voz a Texto</title>
+  <style>
+    #output {
+      margin-top: 20px;
+      height: 200px;
+      overflow: auto;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Traductor de Voz a Texto</h1>
+
+  <button onclick="startSpeechRecognition()">Iniciar</button>
+  <button onclick="stopSpeechRecognition()">Detener</button>
+
+  <div id="output"></div>
+
+  <script>
+    var recognition;
+    var outputDiv = document.getElementById("output");
+
+    function startSpeechRecognition() {
+      recognition = new webkitSpeechRecognition(); // Usamos la API Web Speech de Chrome (webkitSpeechRecognition)
+      recognition.lang = "es-ES"; // Lenguaje en el que se realizará la traducción
+      recognition.interimResults = true; // Mostrar resultados provisionales mientras se habla
+
+      recognition.onresult = function(event) {
+        var transcript = event.results[event.results.length - 1][0].transcript;
+		var numbers = transcript.match(/\d+/g); // Extraer solo los números del texto reconocido
+		
+		 if (numbers === null) {
+			outputDiv.innerHTML +=  " ";
+		}else{
+			outputDiv.innerHTML += numbers + " ";
+		}
+		
+        
+      };
+
+      recognition.start();
+    }
+
+
+    function stopSpeechRecognition() {
+      if (recognition) {
+        recognition.stop();
+      }
+    }
+  </script>
+</body>
+</html>
